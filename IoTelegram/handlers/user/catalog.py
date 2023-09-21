@@ -1,8 +1,8 @@
-from filters import IsUser
 from aiogram.types import Message
 from aiogram.types import CallbackQuery
 from aiogram.types.chat import ChatActions
 
+from filters import IsUser
 from keyboards.inline.categories import categories_markup
 from .menu import catalog
 from loader import dp, db, bot
@@ -19,7 +19,6 @@ async def process_catalog(message: Message):
 
 @dp.callback_query_handler(IsUser(), category_cb.filter(action='view'))
 async def category_callback_handler(query: CallbackQuery, callback_data: dict):
-
     products = db.fetchall('''SELECT * FROM products product
     WHERE product.tag = (SELECT title FROM categories WHERE idx=?) 
     AND product.idx NOT IN (SELECT idx FROM cart WHERE cid = ?)''',
@@ -29,22 +28,15 @@ async def category_callback_handler(query: CallbackQuery, callback_data: dict):
     await show_products(query.message, products)
 
 
-
 async def show_products(m, products):
-
     if len(products) == 0:
-
         await m.answer('Здесь ничего нет 😢')
-
     else:
-
         await bot.send_chat_action(m.chat.id, ChatActions.TYPING)
 
         for idx, title, body, image, price, _ in products:
-
             markup = product_markup(idx, price)
             text = f'<b>{title}</b>\n\n{body}'
-
             await m.answer_photo(photo=image,
                                  caption=text,
                                  reply_markup=markup)
@@ -58,4 +50,3 @@ async def add_product_callback_handler(query: CallbackQuery,
 
     await query.answer('Товар добавлен в корзину!')
     await query.message.delete()
-

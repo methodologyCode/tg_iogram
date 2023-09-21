@@ -1,9 +1,9 @@
 from aiogram.dispatcher import FSMContext
-from aiogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove
-from keyboards.default.markups import all_right_message, cancel_message, submit_markup
+from aiogram.types import ReplyKeyboardRemove
+from keyboards.default.markups import (all_right_message, cancel_message,
+                                       submit_markup)
 from aiogram.types import Message
 from states import SosState
-from filters import IsUser
 from loader import dp, db
 
 
@@ -50,9 +50,7 @@ async def process_submit(message: Message, state: FSMContext):
                      (cid, data['question']))
 
         await message.answer('Отправлено!', reply_markup=ReplyKeyboardRemove())
-
     else:
-
         await message.answer(
             'Превышен лимит на количество задаваемых вопросов.',
             reply_markup=ReplyKeyboardRemove())

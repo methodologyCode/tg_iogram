@@ -182,9 +182,7 @@ async def process_price(message: Message, state: FSMContext):
 
         await ProductState.next()
         text = f'<b>{title}</b>\n\n{body}\n\nЦена: {price} рублей.'
-
         markup = check_markup()
-
         await message.answer_photo(photo=data['image'],
                                    caption=text,
                                    reply_markup=markup)
